@@ -3,7 +3,7 @@
  */
 class API {
     constructor() {
-        // Cambia esta URL por la de tu API en Hostinger
+        // ✅ URL correcta de tu backend en Hostinger
         this.baseURL = 'https://fullstack.ip-geolocation.jorgesandoval31.com/index.php';
     }
 
@@ -12,7 +12,8 @@ class API {
      */
     async request(method, action, data = null) {
         try {
-            let url = `${this.baseURL}?accion=${action}`;
+            // 🔴 CAMBIO IMPORTANTE: tu backend usa 'action' no 'accion'
+            let url = `${this.baseURL}?action=${action}`;
             const options = {
                 method: method,
                 headers: {
@@ -31,8 +32,9 @@ class API {
             const response = await fetch(url, options);
             const result = await response.json();
             
-            if (!result.ok) {
-                throw new Error(result.mensaje || 'Error en la petición');
+            // 🔴 CAMBIO: tu backend devuelve 'success' no 'ok'
+            if (!result.success) {
+                throw new Error(result.message || 'Error en la petición');
             }
             
             return result;
@@ -46,27 +48,31 @@ class API {
      * Obtener todos los contactos
      */
     async getContactos() {
-        return await this.request('GET', 'contactos-completos');
+        // 🔴 CAMBIO: tu backend espera 'contactos'
+        return await this.request('GET', 'contactos');
     }
 
     /**
      * Agregar nuevo contacto
      */
     async addContacto(contacto) {
-        return await this.request('POST', 'agregar-contacto-completo', contacto);
+        // 🔴 CAMBIO: tu backend espera 'agregar'
+        return await this.request('POST', 'agregar', contacto);
     }
 
     /**
      * Actualizar contacto
      */
     async updateContacto(contacto) {
-        return await this.request('PUT', 'actualizar-contacto', contacto);
+        // 🔴 CAMBIO: tu backend espera 'actualizar'
+        return await this.request('PUT', 'actualizar', contacto);
     }
 
     /**
      * Eliminar contacto
      */
     async deleteContacto(id) {
-        return await this.request('DELETE', 'eliminar-contacto', { id });
+        // 🔴 CAMBIO: tu backend espera 'eliminar'
+        return await this.request('DELETE', 'eliminar', { id });
     }
 }

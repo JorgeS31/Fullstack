@@ -1,0 +1,179 @@
+/* ==================== VARIABLES ==================== */
+:root {
+    --primary: #667eea;
+    --primary-dark: #5a67d8;
+    --secondary: #764ba2;
+    --success: #48bb78;
+    --danger: #f56565;
+    --warning: #ed8936;
+    --dark: #1a1a2e;
+}
+
+/* ==================== GENERAL ==================== */
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* ==================== NAVBAR ==================== */
+.navbar {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+/* ==================== HEADER ==================== */
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==================== TABLA ==================== */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table thead tr {
+    background: linear-gradient(135deg, var(--dark) 0%, #2d2d44 100%);
+}
+
+.table thead th {
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 15px;
+}
+
+.table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+/* ==================== BOTONES DE ACCIÓN ==================== */
+.btn-action {
+    padding: 6px 12px;
+    margin: 0 3px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    border: none;
+    color: #fff;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border: none;
+    color: #fff;
+}
+
+/* ==================== MODALES ==================== */
+.modal-content {
+    border: none;
+    overflow: hidden;
+}
+
+.modal-header {
+    border: none;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+}
+
+/* ==================== FORMULARIOS ==================== */
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ==================== FOOTER ==================== */
+.footer {
+    background: linear-gradient(135deg, var(--dark) 0%, #2d2d44 100%);
+    color: white;
+    margin-top: auto;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    .display-5 {
+        font-size: 1.8rem;
+    }
+    
+    .table {
+        font-size: 0.85rem;
+    }
+    
+    .btn-action {
+        padding: 4px 8px;
+    }
+}
+
+/* ==================== SPINNER ==================== */
+.spinner-border {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+/* ==================== BOTÓN PRIMARIO ==================== */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
