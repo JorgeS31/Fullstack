@@ -5,7 +5,6 @@ class ContactosApp {
     constructor() {
         this.api = new API();
         this.contactos = [];
-        this.currentEditId = null;
     }
 
     /**
@@ -27,6 +26,7 @@ class ContactosApp {
             this.contactos = response.data || [];
             this.renderizarTabla();
         } catch (error) {
+            console.error('Error:', error);
             this.mostrarError('Error al cargar contactos: ' + error.message);
             this.renderizarError();
         }
@@ -37,16 +37,18 @@ class ContactosApp {
      */
     mostrarLoading() {
         const tbody = document.getElementById('contactosBody');
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="7" class="text-center py-5">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Cargando...</span>
-                    </div>
-                    <p class="mt-2 text-muted">Cargando contactos...</p>
-                </td>
-            </tr>
-        `;
+        if (tbody) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Cargando contactos...</p>
+                    </td>
+                </tr>
+            `;
+        }
     }
 
     /**
@@ -54,6 +56,8 @@ class ContactosApp {
      */
     renderizarTabla() {
         const tbody = document.getElementById('contactosBody');
+        
+        if (!tbody) return;
         
         if (this.contactos.length === 0) {
             tbody.innerHTML = `
@@ -100,18 +104,20 @@ class ContactosApp {
      */
     renderizarError() {
         const tbody = document.getElementById('contactosBody');
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="7" class="text-center py-5 text-danger">
-                    <i class="fas fa-exclamation-triangle fa-3x mb-3 d-block"></i>
-                    Error al cargar los contactos
-                    <br>
-                    <button class="btn btn-sm btn-primary mt-2" onclick="app.cargarContactos()">
-                        <i class="fas fa-sync-alt me-1"></i> Reintentar
-                    </button>
-                </td>
-            </tr>
-        `;
+        if (tbody) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center py-5 text-danger">
+                        <i class="fas fa-exclamation-triangle fa-3x mb-3 d-block"></i>
+                        Error al cargar los contactos
+                        <br>
+                        <button class="btn btn-sm btn-primary mt-2" onclick="app.cargarContactos()">
+                            <i class="fas fa-sync-alt me-1"></i> Reintentar
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }
     }
 
     /**
@@ -120,11 +126,11 @@ class ContactosApp {
     async agregarContacto(datos) {
         try {
             const response = await this.api.addContacto(datos);
-            if (response.ok) {
+            if (response.success) {
                 await this.cargarContactos();
                 return true;
             }
-            throw new Error(response.mensaje);
+            throw new Error(response.message);
         } catch (error) {
             this.mostrarError('Error al agregar contacto: ' + error.message);
             return false;
@@ -140,16 +146,16 @@ class ContactosApp {
                 id_contacto: id,
                 nombre: datos.nombre,
                 apellido: datos.apellido,
-                fecha_nacimiento: datos.fecha_nacimiento || '1990-01-01',
+                fecha_nacimiento: datos.fecha_nacimiento || null,
                 id_categoria: parseInt(datos.id_categoria)
             };
             
             const response = await this.api.updateContacto(contactoData);
-            if (response.ok) {
+            if (response.success) {
                 await this.cargarContactos();
                 return true;
             }
-            throw new Error(response.mensaje);
+            throw new Error(response.message);
         } catch (error) {
             this.mostrarError('Error al actualizar contacto: ' + error.message);
             return false;
@@ -170,24 +176,23 @@ class ContactosApp {
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: '<i class="fas fa-trash me-1"></i> Sí, eliminar',
-            cancelButtonText: '<i class="fas fa-times me-1"></i> Cancelar',
-            reverseButtons: true
+            cancelButtonText: '<i class="fas fa-times me-1"></i> Cancelar'
         });
 
         if (result.isConfirmed) {
             try {
                 const response = await this.api.deleteContacto(id);
-                if (response.ok) {
-                    Swal.fire({
+                if (response.success) {
+                    await Swal.fire({
                         title: '¡Eliminado!',
                         text: 'El contacto ha sido eliminado correctamente.',
                         icon: 'success',
-                        timer: 2000,
+                        timer: 1500,
                         showConfirmButton: false
                     });
                     await this.cargarContactos();
                 } else {
-                    throw new Error(response.mensaje);
+                    throw new Error(response.message);
                 }
             } catch (error) {
                 this.mostrarError('Error al eliminar contacto: ' + error.message);
@@ -202,7 +207,6 @@ class ContactosApp {
         const contacto = this.contactos.find(c => c.id_contacto == id);
         if (!contacto) return;
 
-        // Llenar el modal de edición
         document.getElementById('edit_id_contacto').value = contacto.id_contacto;
         document.getElementById('edit_nombre').value = contacto.nombre;
         document.getElementById('edit_apellido').value = contacto.apellido;
@@ -211,7 +215,6 @@ class ContactosApp {
         document.getElementById('edit_fecha_nacimiento').value = contacto.fecha_nacimiento || '';
         document.getElementById('edit_id_categoria').value = contacto.id_categoria || 1;
 
-        // Mostrar modal
         const editModal = new bootstrap.Modal(document.getElementById('editModal'));
         editModal.show();
     }
@@ -301,16 +304,15 @@ class ContactosApp {
             icon: 'error',
             title: 'Error',
             text: mensaje,
-            confirmButtonColor: '#667eea',
-            confirmButtonText: '<i class="fas fa-check me-1"></i> Entendido'
+            confirmButtonColor: '#667eea'
         });
     }
 }
 
-// Inicializar la aplicación cuando el DOM esté listo
+// Inicializar la aplicación
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new ContactosApp();
     app.init();
-    window.app = app; // Exponer globalmente para los onclick
+    window.app = app;
 });
