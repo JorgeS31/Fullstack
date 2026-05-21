@@ -3,7 +3,7 @@
  */
 class API {
     constructor() {
-        // ✅ URL correcta de tu backend en Hostinger
+        // URL de tu backend en Hostinger
         this.baseURL = 'https://fullstack.ip-geolocation.jorgesandoval31.com/index.php';
     }
 
